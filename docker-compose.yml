@@ -1,12 +1,26 @@
 services:
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: artemis-backend
+  postgres:
+    image: postgres:16-alpine
+    container_name: artemis-db
     restart: unless-stopped
+    environment:
+      POSTGRES_DB: artemis_db
+      POSTGRES_USER: artemis_user
+      POSTGRES_PASSWORD: artemis_password
     ports:
-      - "8080:8080"
+      - "5432:5432"
     expose:
-      - "8080"
+      - "5432"
+    volumes:
+      - ./database/data:/var/lib/postgresql/data
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: artemis-backend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "8080:8080"
+  #   expose:
+  #     - "8080"
