@@ -16,6 +16,10 @@ spring:
       enabled: false
     livereload:
       enabled: false
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
 
 logging:
   level:
