@@ -1,14 +1,25 @@
 package com.mralmostcool.artemis.auth;
 
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mralmostcool.artemis.auth.dto.AuthLogResponse;
 import com.mralmostcool.artemis.auth.dto.LoginRequest;
 import com.mralmostcool.artemis.auth.dto.LoginResponse;
 import com.mralmostcool.artemis.auth.dto.RefreshRequest;
@@ -16,7 +27,6 @@ import com.mralmostcool.artemis.auth.dto.RegisterRequest;
 import com.mralmostcool.artemis.auth.dto.TokenResponse;
 import com.mralmostcool.artemis.auth.dto.UserResponse;
 
-import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -54,6 +64,31 @@ public class AuthController {
     @GetMapping("/me")
     public ResponseEntity<UserResponse> getMe(@AuthenticationPrincipal UserDetails userDetails) {
         UserResponse response = authService.getMe(userDetails.getUsername());
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/logs")
+    public ResponseEntity<?> getLogs(
+            @RequestParam(value = "userId", required = false) UUID userId,
+            @RequestParam(value = "page", required = false) Integer page,
+            @RequestParam(value = "size", required = false) Integer size,
+            @RequestParam(value = "sortBy", defaultValue = "createdAt") String sortBy,
+            @RequestParam(value = "direction", defaultValue = "DESC") String direction) {
+
+        if (page != null && size != null) {
+            Sort.Direction dir = Sort.Direction.fromString(direction.toUpperCase());
+            Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sortBy));
+            Page<AuthLogResponse> response = authService.getLogsPaginated(userId, pageable);
+            return ResponseEntity.ok(response);
+        } else {
+            List<AuthLogResponse> response = authService.getLogs(userId);
+            return ResponseEntity.ok(response);
+        }
+    }
+
+    @GetMapping("/logs/{id}")
+    public ResponseEntity<AuthLogResponse> getLogById(@PathVariable("id") UUID id) {
+        AuthLogResponse response = authService.getLogById(id);
         return ResponseEntity.ok(response);
     }
 
