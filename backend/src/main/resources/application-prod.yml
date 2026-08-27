@@ -25,3 +25,9 @@ logging:
   level:
     root: INFO
     org.springframework: WARN
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET}
+    expiration: ${JWT_EXPIRATION:900000} # 15 minutes in ms
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days in ms

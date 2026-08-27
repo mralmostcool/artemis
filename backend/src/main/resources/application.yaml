@@ -23,3 +23,9 @@ management:
     web:
       exposure:
         include: health,info,prometheus,metrics
+
+security:
+  jwt:
+    secret-key: ${JWT_SECRET:3cfa76ef14937c1c0ea519f8fc057a80fcd04a714f2a0c502d03433810c68f13}
+    expiration: ${JWT_EXPIRATION:900000} # 15 minutes in ms
+    refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000} # 7 days in ms
