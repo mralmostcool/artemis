@@ -63,8 +63,9 @@
     activePage = page;
   }
 
-  /** @param {string} groupName */
+  /** @param {string|null} groupName */
   function handleGroupBreadcrumbClick(groupName) {
+    if (!groupName) return;
     const groupIndex = navItems.findIndex(item => item.type === 'group' && item.name === groupName);
     if (groupIndex !== -1) {
       // @ts-ignore
