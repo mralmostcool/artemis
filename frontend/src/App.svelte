@@ -61,7 +61,7 @@
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: var(--text-h);
+    color: var(--text-primary);
     font-size: 18px;
   }
 </style>

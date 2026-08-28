@@ -33,6 +33,9 @@
 <div class="login-container">
   <div class="login-card">
     <div class="header">
+      <div class="logo-box">
+        <span class="material-symbols-outlined logo-icon">blur_on</span>
+      </div>
       <h2>Welcome Back</h2>
       <p>Log in to access your dashboard</p>
     </div>
@@ -40,30 +43,37 @@
     <form onsubmit={handleSubmit} class="login-form">
       {#if errorMsg}
         <div class="error-banner">
+          <span class="material-symbols-outlined error-icon">error</span>
           {errorMsg}
         </div>
       {/if}
 
       <div class="input-group">
         <label for="email">Email</label>
-        <input 
-          id="email" 
-          type="email" 
-          bind:value={email} 
-          placeholder="you@example.com" 
-          required 
-        />
+        <div class="input-wrapper">
+          <span class="material-symbols-outlined input-icon">mail</span>
+          <input 
+            id="email" 
+            type="email" 
+            bind:value={email} 
+            placeholder="you@example.com" 
+            required 
+          />
+        </div>
       </div>
 
       <div class="input-group">
         <label for="password">Password</label>
-        <input 
-          id="password" 
-          type="password" 
-          bind:value={password} 
-          placeholder="••••••••" 
-          required 
-        />
+        <div class="input-wrapper">
+          <span class="material-symbols-outlined input-icon">lock</span>
+          <input 
+            id="password" 
+            type="password" 
+            bind:value={password} 
+            placeholder="••••••••" 
+            required 
+          />
+        </div>
       </div>
 
       <button type="submit" class="submit-btn" disabled={loading}>
@@ -75,9 +85,9 @@
       <button class="bypass-btn" onclick={() => onLogin({ firstName: 'Guest', lastName: 'User', email: 'guest@example.com' })}>
         Bypass / Preview Dashboard
       </button>
-      <div style="margin-top: 12px; font-size: 14px;">
+      <div class="signup-prompt">
         Don't have an account? 
-        <button class="bypass-btn" onclick={onRegister} style="display: inline; padding: 0; text-decoration: underline;">
+        <button class="signup-link" onclick={onRegister}>
           Sign Up
         </button>
       </div>
@@ -90,42 +100,59 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-grow: 1;
-    padding: 20px;
-    background: radial-gradient(circle at top left, var(--accent-bg), transparent 40%),
-                radial-gradient(circle at bottom right, rgba(0,0,0,0.05), transparent 40%);
+    min-height: 100vh;
+    padding: 24px;
+    background: radial-gradient(120% 120% at 0% 0%, rgba(55, 125, 255, 0.05) 0%, rgba(255, 255, 255, 0) 100%), var(--bg-main);
   }
 
   .login-card {
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
     padding: 40px;
     width: 100%;
-    max-width: 420px;
-    box-shadow: var(--shadow);
+    max-width: 440px;
+    box-shadow: var(--shadow-md);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
 
   .login-card:hover {
     transform: translateY(-2px);
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .logo-box {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--primary-light);
+    color: var(--primary);
+    margin-bottom: 20px;
+  }
+
+  .logo-icon {
+    font-size: 28px;
   }
 
   .header {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
   }
 
   .header h2 {
     margin: 0 0 8px;
-    font-size: 28px;
-    font-weight: 500;
+    font-size: 24px;
+    font-weight: 600;
+    color: var(--text-primary);
   }
 
   .header p {
-    color: var(--text);
-    font-size: 15px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin: 0;
   }
 
   .login-form {
@@ -135,13 +162,20 @@
   }
 
   .error-banner {
-    background: rgba(239, 68, 68, 0.1);
-    border: 1px solid rgba(239, 68, 68, 0.3);
-    color: #ef4444;
-    padding: 10px 12px;
-    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(237, 76, 120, 0.08);
+    border: 1px solid rgba(237, 76, 120, 0.2);
+    color: var(--danger);
+    padding: 12px;
+    border-radius: 8px;
     font-size: 14px;
-    text-align: center;
+    text-align: left;
+  }
+
+  .error-icon {
+    font-size: 18px;
   }
 
   .input-group {
@@ -152,65 +186,110 @@
   }
 
   .input-group label {
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    color: var(--text-h);
+    color: var(--text-primary);
+  }
+
+  .input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 12px;
+    color: var(--text-muted);
+    font-size: 18px;
   }
 
   .input-group input {
-    padding: 12px 16px;
+    width: 100%;
+    padding: 12px 12px 12px 40px;
     border-radius: 8px;
-    border: 1px solid var(--border);
-    background: var(--bg);
-    color: var(--text-h);
-    font-size: 15px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-card);
+    color: var(--text-primary);
+    font-size: 14px;
     outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
   }
 
   .input-group input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-bg);
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px var(--primary-light);
   }
 
   .submit-btn {
-    background: var(--accent);
+    background: var(--primary);
     color: #fff;
     padding: 12px;
     border-radius: 8px;
     border: none;
-    font-size: 16px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     cursor: pointer;
-    transition: filter 0.2s, transform 0.1s;
+    transition: background-color 0.2s, transform 0.1s;
+    margin-top: 8px;
   }
 
-  .submit-btn:hover {
-    filter: brightness(1.1);
+  .submit-btn:hover:not(:disabled) {
+    background-color: var(--primary-hover);
   }
 
-  .submit-btn:active {
+  .submit-btn:active:not(:disabled) {
     transform: scale(0.98);
   }
 
+  .submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
   .footer {
-    margin-top: 24px;
+    margin-top: 32px;
     text-align: center;
-    border-top: 1px solid var(--border);
-    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+    padding-top: 20px;
   }
 
   .bypass-btn {
-    background: none;
-    border: none;
-    color: var(--accent);
-    font-size: 14px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 6px;
     cursor: pointer;
-    text-decoration: underline;
-    transition: opacity 0.2s;
+    transition: background-color 0.2s, color 0.2s;
+    width: 100%;
   }
 
   .bypass-btn:hover {
-    opacity: 0.8;
+    background-color: var(--border-color);
+    color: var(--text-primary);
+  }
+
+  .signup-prompt {
+    margin-top: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .signup-link {
+    background: none;
+    border: none;
+    color: var(--primary);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 0 4px;
+  }
+
+  .signup-link:hover {
+    text-decoration: underline;
   }
 </style>
