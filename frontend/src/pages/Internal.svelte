@@ -96,10 +96,6 @@
 <div class="dashboard-container">
   <!-- Sidebar -->
   <aside class="sidebar">
-    <div class="sidebar-header">
-      <span class="material-symbols-outlined brand-icon">blur_on</span>
-      <span class="brand-name">Artemis</span>
-    </div>
     
     <nav class="sidebar-nav">
       {#each navItems as item, index}
