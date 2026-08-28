@@ -3,6 +3,7 @@
 
   let { user, onLogout } = $props();
 
+  /** @type {string | null} */
   let activeGroup = $state(null);
   let activePage = $state('Dashboard');
 
@@ -60,6 +61,17 @@
   function selectPage(group, page) {
     activeGroup = group;
     activePage = page;
+  }
+
+  /** @param {string} groupName */
+  function handleGroupBreadcrumbClick(groupName) {
+    const groupIndex = navItems.findIndex(item => item.type === 'group' && item.name === groupName);
+    if (groupIndex !== -1) {
+      // @ts-ignore
+      navItems[groupIndex].expanded = true;
+      // @ts-ignore
+      selectPage(groupName, navItems[groupIndex].pages[0].name);
+    }
   }
 
   /** @param {number} index */
@@ -160,7 +172,9 @@
     <header class="main-header">
       <div class="breadcrumbs">
         {#if activeGroup}
-          <span class="breadcrumb-item">{activeGroup}</span>
+          <button class="breadcrumb-btn" onclick={() => handleGroupBreadcrumbClick(activeGroup)}>
+            {activeGroup}
+          </button>
           <span class="breadcrumb-separator">/</span>
         {/if}
         <span class="breadcrumb-active">{activePage}</span>
@@ -444,6 +458,23 @@
     font-weight: 500;
     color: var(--text-secondary);
     margin-bottom: 12px;
+  }
+
+  .breadcrumb-btn {
+    background: transparent;
+    border: none;
+    padding: 0;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: color 0.2s;
+    font-family: inherit;
+  }
+
+  .breadcrumb-btn:hover {
+    color: var(--primary);
+    text-decoration: underline;
   }
 
   .breadcrumb-separator {
