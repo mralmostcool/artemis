@@ -17,6 +17,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@org.springframework.modulith.NamedInterface
 @Entity
 @Getter
 @Setter

@@ -15,6 +15,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+@org.springframework.modulith.NamedInterface
 @Service
 public class JwtService {
 

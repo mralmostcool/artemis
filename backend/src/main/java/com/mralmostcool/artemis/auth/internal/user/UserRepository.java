@@ -6,6 +6,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+@org.springframework.modulith.NamedInterface
 @Repository
 public interface UserRepository extends JpaRepository<User, UUID> {
 
