@@ -51,6 +51,13 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
 
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: artemis-frontend
+    restart: unless-stopped
+
   nginx:
     build:
       context: ./nginx
@@ -61,5 +68,7 @@ services:
       - "80:80"
     depends_on:
       - backend
+      - frontend
+
 
 
