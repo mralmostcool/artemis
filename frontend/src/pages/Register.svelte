@@ -1,4 +1,6 @@
 <script>
+  import { register } from '../lib/api'
+
   // Svelte 5 runes
   let { onBackToLogin } = $props();
 
@@ -9,24 +11,37 @@
   let confirmPassword = $state('');
   let errorMsg = $state('');
   let successMsg = $state('');
+  let loading = $state(false);
 
   /** @param {SubmitEvent} e */
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!firstName || !lastName || !email || !password || !confirmPassword) {
       errorMsg = 'All fields are required';
+      return;
+    }
+    if (password.length < 8) {
+      errorMsg = 'Password must be at least 8 characters long';
       return;
     }
     if (password !== confirmPassword) {
       errorMsg = 'Passwords do not match';
       return;
     }
-    errorMsg = '';
-    successMsg = 'Registration successful! Redirecting to login...';
 
-    setTimeout(() => {
-      onBackToLogin();
-    }, 1500);
+    try {
+      errorMsg = '';
+      loading = true;
+      await register(firstName, lastName, email, password);
+      successMsg = 'Registration successful! Redirecting to login...';
+      setTimeout(() => {
+        onBackToLogin();
+      }, 1500);
+    } catch (err) {
+      errorMsg = err instanceof Error ? err.message : 'Registration failed';
+    } finally {
+      loading = false;
+    }
   }
 </script>
 
@@ -107,8 +122,8 @@
         />
       </div>
 
-      <button type="submit" class="submit-btn" disabled={!!successMsg}>
-        Register
+      <button type="submit" class="submit-btn" disabled={loading || !!successMsg}>
+        {loading ? 'Registering...' : 'Register'}
       </button>
     </form>
 

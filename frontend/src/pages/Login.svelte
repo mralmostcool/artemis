@@ -1,20 +1,32 @@
 <script>
+  import { login } from '../lib/api'
+
   // Svelte 5 runes
   let { onLogin, onRegister } = $props();
 
   let email = $state('');
   let password = $state('');
   let errorMsg = $state('');
+  let loading = $state(false);
 
   /** @param {SubmitEvent} e */
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     if (!email || !password) {
       errorMsg = 'Please enter both email and password';
       return;
     }
-    errorMsg = '';
-    onLogin();
+    
+    try {
+      errorMsg = '';
+      loading = true;
+      const user = await login(email, password);
+      onLogin(user);
+    } catch (err) {
+      errorMsg = err instanceof Error ? err.message : 'Invalid credentials';
+    } finally {
+      loading = false;
+    }
   }
 </script>
 
@@ -54,13 +66,13 @@
         />
       </div>
 
-      <button type="submit" class="submit-btn">
-        Sign In
+      <button type="submit" class="submit-btn" disabled={loading}>
+        {loading ? 'Signing In...' : 'Sign In'}
       </button>
     </form>
 
     <div class="footer">
-      <button class="bypass-btn" onclick={onLogin}>
+      <button class="bypass-btn" onclick={() => onLogin({ firstName: 'Guest', lastName: 'User', email: 'guest@example.com' })}>
         Bypass / Preview Dashboard
       </button>
       <div style="margin-top: 12px; font-size: 14px;">

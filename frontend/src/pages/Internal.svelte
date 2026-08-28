@@ -3,8 +3,18 @@
   import viteLogo from '../assets/vite.svg'
   import heroImg from '../assets/hero.png'
   import Counter from '../components/Counter.svelte'
+  import { logout } from '../lib/api'
 
-  let { onLogout } = $props();
+  let { user, onLogout } = $props();
+
+  async function handleLogout() {
+    try {
+      await logout();
+    } catch (err) {
+      console.error('Error during logout:', err);
+    }
+    onLogout();
+  }
 </script>
 
 <header class="dashboard-header">
@@ -12,7 +22,12 @@
     <img src={svelteLogo} height="24" alt="Svelte" />
     <span>Artemis Portal</span>
   </div>
-  <button class="logout-btn" onclick={onLogout}>Log Out</button>
+  <div class="user-profile">
+    {#if user}
+      <span class="user-name">Welcome, {user.firstName} {user.lastName}!</span>
+    {/if}
+    <button class="logout-btn" onclick={handleLogout}>Log Out</button>
+  </div>
 </header>
 
 <section id="center">
@@ -107,6 +122,17 @@
     border-bottom: 1px solid var(--border);
     width: 100%;
     box-sizing: border-box;
+  }
+
+  .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .user-name {
+    font-size: 14px;
+    color: var(--text);
   }
 
   .logo-area {
