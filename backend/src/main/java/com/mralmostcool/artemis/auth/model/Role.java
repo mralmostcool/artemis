@@ -1,4 +1,4 @@
-package com.mralmostcool.artemis.model;
+package com.mralmostcool.artemis.auth.model;
 
 public enum Role {
     ADMIN,

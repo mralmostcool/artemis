@@ -1,6 +1,6 @@
-package com.mralmostcool.artemis.security;
+package com.mralmostcool.artemis.auth.security;
 
-import com.mralmostcool.artemis.model.Profile;
+import com.mralmostcool.artemis.auth.model.Profile;
 import org.springframework.security.oauth2.jwt.Jwt;
 import java.security.Principal;
 

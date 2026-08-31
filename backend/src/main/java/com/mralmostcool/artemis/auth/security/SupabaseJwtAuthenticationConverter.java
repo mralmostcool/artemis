@@ -1,7 +1,7 @@
-package com.mralmostcool.artemis.security;
+package com.mralmostcool.artemis.auth.security;
 
-import com.mralmostcool.artemis.model.Profile;
-import com.mralmostcool.artemis.repository.ProfileRepository;
+import com.mralmostcool.artemis.auth.model.Profile;
+import com.mralmostcool.artemis.auth.repository.ProfileRepository;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
