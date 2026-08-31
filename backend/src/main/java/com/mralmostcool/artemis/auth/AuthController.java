@@ -43,4 +43,21 @@ public class AuthController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PutMapping
+    public ResponseEntity<ProfileResponse> updateProfile(
+            @AuthenticationPrincipal UserPrincipal principal,
+            @RequestBody ProfileRequest request) {
+
+        if (principal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            ProfileResponse response = authService.updateProfile(principal, request);
+            return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

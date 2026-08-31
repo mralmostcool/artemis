@@ -27,6 +27,12 @@ public class Profile {
 
     private String email;
 
+    @Column(name = "display_name", nullable = false)
+    private String displayName;
+
+    @Column(name = "phone_number")
+    private String phoneNumber;
+
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
 }

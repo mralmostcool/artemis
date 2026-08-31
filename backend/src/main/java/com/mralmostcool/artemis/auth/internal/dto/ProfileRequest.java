@@ -12,4 +12,6 @@ public class ProfileRequest {
     private String organizationName;
     private Long organizationId;
     private Role role;
+    private String displayName;
+    private String phoneNumber;
 }

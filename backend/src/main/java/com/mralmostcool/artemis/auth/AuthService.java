@@ -39,6 +39,10 @@ public class AuthService {
             return mapToResponse(existing);
         }
 
+        if (request.getDisplayName() == null || request.getDisplayName().isBlank()) {
+            throw new IllegalArgumentException("Display Name is mandatory");
+        }
+
         String email = principal.getJwt().getClaimAsString("email");
         Organization organization = null;
         Role role = request.getRole() != null ? request.getRole() : Role.EMPLOYEE;
@@ -57,9 +61,29 @@ public class AuthService {
         Profile profile = Profile.builder()
                 .id(userId)
                 .email(email)
+                .displayName(request.getDisplayName())
+                .phoneNumber(request.getPhoneNumber())
                 .organization(organization)
                 .role(role)
                 .build();
+
+        profile = profileRepository.save(profile);
+        return mapToResponse(profile);
+    }
+
+    @Transactional
+    public ProfileResponse updateProfile(UserPrincipal principal, ProfileRequest request) {
+        UUID userId = UUID.fromString(principal.getJwt().getSubject());
+        Profile profile = profileRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+
+        if (request.getDisplayName() != null && !request.getDisplayName().isBlank()) {
+            profile.setDisplayName(request.getDisplayName());
+        }
+        
+        if (request.getPhoneNumber() != null) {
+            profile.setPhoneNumber(request.getPhoneNumber().isBlank() ? null : request.getPhoneNumber());
+        }
 
         profile = profileRepository.save(profile);
         return mapToResponse(profile);
@@ -69,6 +93,8 @@ public class AuthService {
         return ProfileResponse.builder()
                 .id(profile.getId())
                 .email(profile.getEmail())
+                .displayName(profile.getDisplayName())
+                .phoneNumber(profile.getPhoneNumber())
                 .role(profile.getRole())
                 .organizationId(profile.getOrganization() != null ? profile.getOrganization().getId() : null)
                 .organizationName(profile.getOrganization() != null ? profile.getOrganization().getName() : null)

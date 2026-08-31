@@ -15,4 +15,6 @@ public class ProfileResponse {
     private Role role;
     private Long organizationId;
     private String organizationName;
+    private String displayName;
+    private String phoneNumber;
 }
