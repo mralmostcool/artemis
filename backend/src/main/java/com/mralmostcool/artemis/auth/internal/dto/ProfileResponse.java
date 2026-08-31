@@ -1,6 +1,6 @@
-package com.mralmostcool.artemis.auth.dto;
+package com.mralmostcool.artemis.auth.internal.dto;
 
-import com.mralmostcool.artemis.auth.model.Role;
+import com.mralmostcool.artemis.auth.internal.model.Role;
 import lombok.*;
 import java.util.UUID;
 

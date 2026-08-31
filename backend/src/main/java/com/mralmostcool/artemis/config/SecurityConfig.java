@@ -10,7 +10,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.mralmostcool.artemis.auth.security.SupabaseJwtAuthenticationConverter;
+import com.mralmostcool.artemis.auth.internal.security.SupabaseJwtAuthenticationConverter;
 
 @Configuration
 @EnableWebSecurity

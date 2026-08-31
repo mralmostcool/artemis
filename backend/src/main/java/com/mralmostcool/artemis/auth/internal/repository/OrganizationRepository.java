@@ -1,6 +1,6 @@
-package com.mralmostcool.artemis.auth.repository;
+package com.mralmostcool.artemis.auth.internal.repository;
 
-import com.mralmostcool.artemis.auth.model.Organization;
+import com.mralmostcool.artemis.auth.internal.model.Organization;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

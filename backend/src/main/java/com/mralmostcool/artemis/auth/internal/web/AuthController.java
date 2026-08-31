@@ -1,13 +1,13 @@
-package com.mralmostcool.artemis.auth.web;
+package com.mralmostcool.artemis.auth.internal.web;
 
-import com.mralmostcool.artemis.auth.dto.ProfileRequest;
-import com.mralmostcool.artemis.auth.dto.ProfileResponse;
-import com.mralmostcool.artemis.auth.model.Organization;
-import com.mralmostcool.artemis.auth.model.Profile;
-import com.mralmostcool.artemis.auth.model.Role;
-import com.mralmostcool.artemis.auth.repository.OrganizationRepository;
-import com.mralmostcool.artemis.auth.repository.ProfileRepository;
-import com.mralmostcool.artemis.auth.security.UserPrincipal;
+import com.mralmostcool.artemis.auth.internal.dto.ProfileRequest;
+import com.mralmostcool.artemis.auth.internal.dto.ProfileResponse;
+import com.mralmostcool.artemis.auth.internal.model.Organization;
+import com.mralmostcool.artemis.auth.internal.model.Profile;
+import com.mralmostcool.artemis.auth.internal.model.Role;
+import com.mralmostcool.artemis.auth.internal.repository.OrganizationRepository;
+import com.mralmostcool.artemis.auth.internal.repository.ProfileRepository;
+import com.mralmostcool.artemis.auth.internal.security.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

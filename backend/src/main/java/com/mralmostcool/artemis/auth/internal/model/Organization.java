@@ -1,4 +1,4 @@
-package com.mralmostcool.artemis.auth.model;
+package com.mralmostcool.artemis.auth.internal.model;
 
 import jakarta.persistence.*;
 import lombok.*;
