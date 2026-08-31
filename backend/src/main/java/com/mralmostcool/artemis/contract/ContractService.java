@@ -8,7 +8,6 @@ import com.mralmostcool.artemis.seafarer.SeafarerService;
 import com.mralmostcool.artemis.seafarer.internal.model.SeafarerMedical;
 import com.mralmostcool.artemis.vessel.VesselService;
 import com.mralmostcool.artemis.vessel.internal.model.Company;
-import com.mralmostcool.artemis.vessel.internal.model.BerthSeafarerAllocation;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.Duration;
@@ -24,16 +23,13 @@ public class ContractService {
     private final ContractRepository contractRepository;
     private final SeafarerService seafarerService;
     private final VesselService vesselService;
-    private final InstituteService instituteService;
 
     public ContractService(ContractRepository contractRepository,
                            SeafarerService seafarerService,
-                           VesselService vesselService,
-                           InstituteService instituteService) {
+                           VesselService vesselService) {
         this.contractRepository = contractRepository;
         this.seafarerService = seafarerService;
         this.vesselService = vesselService;
-        this.instituteService = instituteService;
     }
 
     public List<Contract> getAllContracts() {

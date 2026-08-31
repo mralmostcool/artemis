@@ -4,7 +4,6 @@ import com.mralmostcool.artemis.seafarer.SeafarerService;
 import com.mralmostcool.artemis.seafarer.internal.model.IndosMaster;
 import com.mralmostcool.artemis.seafarer.internal.model.RankMaster;
 import com.mralmostcool.artemis.vessel.internal.model.*;
-import com.mralmostcool.artemis.vessel.internal.repository.ConcessionLedgerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,9 +21,6 @@ class VesselIntegrationTests {
 
     @Autowired
     private SeafarerService seafarerService;
-
-    @Autowired
-    private ConcessionLedgerRepository concessionRepository;
 
     @Test
     @Transactional

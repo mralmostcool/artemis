@@ -3,9 +3,6 @@ package com.mralmostcool.artemis.seafarer;
 import com.mralmostcool.artemis.seafarer.internal.model.IndosMaster;
 import com.mralmostcool.artemis.seafarer.internal.model.RankMaster;
 import com.mralmostcool.artemis.seafarer.internal.model.SeafarerMedical;
-import com.mralmostcool.artemis.seafarer.internal.repository.IndosMasterRepository;
-import com.mralmostcool.artemis.seafarer.internal.repository.RankMasterRepository;
-import com.mralmostcool.artemis.seafarer.internal.repository.SeafarerMedicalRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,15 +16,6 @@ class SeafarerIntegrationTests {
 
     @Autowired
     private SeafarerService seafarerService;
-
-    @Autowired
-    private RankMasterRepository rankRepository;
-
-    @Autowired
-    private IndosMasterRepository indosRepository;
-
-    @Autowired
-    private SeafarerMedicalRepository medicalRepository;
 
     @Test
     @Transactional
