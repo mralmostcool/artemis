@@ -3,7 +3,6 @@ package com.mralmostcool.artemis.contract;
 import com.mralmostcool.artemis.contract.internal.model.Contract;
 import com.mralmostcool.artemis.contract.internal.model.ContractStatus;
 import com.mralmostcool.artemis.contract.internal.repository.ContractRepository;
-import com.mralmostcool.artemis.institute.InstituteService;
 import com.mralmostcool.artemis.seafarer.SeafarerService;
 import com.mralmostcool.artemis.seafarer.internal.model.SeafarerMedical;
 import com.mralmostcool.artemis.vessel.VesselService;
@@ -25,8 +24,8 @@ public class ContractService {
     private final VesselService vesselService;
 
     public ContractService(ContractRepository contractRepository,
-                           SeafarerService seafarerService,
-                           VesselService vesselService) {
+            SeafarerService seafarerService,
+            VesselService vesselService) {
         this.contractRepository = contractRepository;
         this.seafarerService = seafarerService;
         this.vesselService = vesselService;
@@ -74,7 +73,7 @@ public class ContractService {
     public Contract extendContract(UUID contractId, OffsetDateTime extendedSignOffDate) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new IllegalArgumentException("Contract not found"));
-        
+
         if (extendedSignOffDate.isBefore(contract.getSignOnDate())) {
             throw new IllegalArgumentException("Extended date must be after sign-on date");
         }
@@ -114,7 +113,8 @@ public class ContractService {
     }
 
     @Transactional
-    public Contract signOff(UUID contractId, OffsetDateTime actualSignOff, String port, String country, String remarks) {
+    public Contract signOff(UUID contractId, OffsetDateTime actualSignOff, String port, String country,
+            String remarks) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new IllegalArgumentException("Contract not found"));
 
@@ -136,7 +136,7 @@ public class ContractService {
 
         // Compute cadet days logged
         long cadetDays = Duration.between(contract.getActualSignOnDate(), actualSignOff).toDays();
-        
+
         // Log cadet sea time concession values to vessel ledger
         vesselService.logConcession(
                 contract.getBerthSeafarerAllocation().getId(),
