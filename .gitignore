@@ -1,4 +1,5 @@
 **/.env
-/database/data/
-/database/redis/data
+**/cache/*
 **/.vscode
+**/*.rdb
+/cache/data/
