@@ -17,7 +17,7 @@ $updateBody = @{
     phoneNumber = $newPhoneNumber
 } | ConvertTo-Json
 
-$updateResponse = curl.exe -s -X PUT $vars.authBaseURL `
+$null = curl.exe -s -X PUT $vars.authBaseURL `
   -H "Authorization: Bearer $($vars.adminToken)" `
   -H "Content-Type: application/json" `
   -d $updateBody | ConvertFrom-Json

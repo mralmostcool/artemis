@@ -2,6 +2,7 @@ package com.mralmostcool.artemis.auth.internal.dto;
 
 import com.mralmostcool.artemis.auth.internal.model.Role;
 import lombok.*;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -15,7 +16,12 @@ public class ProfileResponse {
     private Role role;
     private Long organizationId;
     private String organizationName;
+    private String firstName;
+    private String lastName;
     private String displayName;
     private String phoneNumber;
+    private String gender;
+    private LocalDate dateOfBirth;
+    private String avatarUrl;
     private boolean enabled;
 }
