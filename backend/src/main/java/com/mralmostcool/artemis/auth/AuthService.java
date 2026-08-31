@@ -1,4 +1,4 @@
-package com.mralmostcool.artemis.auth.internal.web;
+package com.mralmostcool.artemis.auth;
 
 import com.mralmostcool.artemis.auth.internal.dto.ProfileRequest;
 import com.mralmostcool.artemis.auth.internal.dto.ProfileResponse;
@@ -8,46 +8,35 @@ import com.mralmostcool.artemis.auth.internal.model.Role;
 import com.mralmostcool.artemis.auth.internal.repository.OrganizationRepository;
 import com.mralmostcool.artemis.auth.internal.repository.ProfileRepository;
 import com.mralmostcool.artemis.auth.internal.security.UserPrincipal;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
-@RestController
-@RequestMapping("/api/v1/auth")
-public class AuthController {
+@Service
+public class AuthService {
 
     private final ProfileRepository profileRepository;
     private final OrganizationRepository organizationRepository;
 
-    public AuthController(ProfileRepository profileRepository, OrganizationRepository organizationRepository) {
+    public AuthService(ProfileRepository profileRepository, OrganizationRepository organizationRepository) {
         this.profileRepository = profileRepository;
         this.organizationRepository = organizationRepository;
     }
 
-    @GetMapping
-    public ResponseEntity<ProfileResponse> getProfile(@AuthenticationPrincipal UserPrincipal principal) {
+    public ProfileResponse getProfile(UserPrincipal principal) {
         if (principal == null || principal.getProfile() == null) {
-            return ResponseEntity.notFound().build();
+            return null;
         }
-        return ResponseEntity.ok(mapToResponse(principal.getProfile()));
+        return mapToResponse(principal.getProfile());
     }
 
-    @PostMapping
-    public ResponseEntity<ProfileResponse> registerProfile(
-            @AuthenticationPrincipal UserPrincipal principal,
-            @RequestBody ProfileRequest request) {
-
-        if (principal == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
+    @Transactional
+    public ProfileResponse registerProfile(UserPrincipal principal, ProfileRequest request) {
         UUID userId = UUID.fromString(principal.getJwt().getSubject());
         
         Profile existing = profileRepository.findById(userId).orElse(null);
         if (existing != null) {
-            return ResponseEntity.ok(mapToResponse(existing));
+            return mapToResponse(existing);
         }
 
         String email = principal.getJwt().getClaimAsString("email");
@@ -73,7 +62,7 @@ public class AuthController {
                 .build();
 
         profile = profileRepository.save(profile);
-        return ResponseEntity.status(HttpStatus.CREATED).body(mapToResponse(profile));
+        return mapToResponse(profile);
     }
 
     private ProfileResponse mapToResponse(Profile profile) {
