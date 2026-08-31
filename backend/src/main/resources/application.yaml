@@ -16,6 +16,10 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${SUPABASE_JWK_SET_URI}
+  data:
+    redis:
+      repositories:
+        enabled: false
 
 springdoc:
   api-docs:
