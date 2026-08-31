@@ -44,6 +44,12 @@ public class SeafarerService {
         if (rank.getLevel() == null) {
             throw new IllegalArgumentException("Rank level is mandatory");
         }
+        java.util.Optional<RankMaster> existing = rankRepository.findAll().stream()
+                .filter(r -> r.getName().equalsIgnoreCase(rank.getName()))
+                .findFirst();
+        if (existing.isPresent()) {
+            return existing.get();
+        }
         return rankRepository.save(rank);
     }
 
@@ -96,6 +102,10 @@ public class SeafarerService {
         }
         if (indosMaster.getRank() == null || indosMaster.getRank().getId() == null) {
             throw new IllegalArgumentException("Rank detail is mandatory");
+        }
+        java.util.Optional<IndosMaster> existing = indosRepository.findByIndos(indosMaster.getIndos());
+        if (existing.isPresent()) {
+            return existing.get();
         }
         RankMaster rank = rankRepository.findById(indosMaster.getRank().getId())
                 .orElseThrow(() -> new IllegalArgumentException("Rank not found"));

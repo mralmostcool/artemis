@@ -16,7 +16,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          jwk-set-uri: ${SUPABASE_JWK_SET_URI}
+          jwk-set-uri: ${SUPABASE_JWK_SET_URI:https://jykhntdyjvirbinznxgv.supabase.co/auth/v1/.well-known/jwks.json}
   data:
     redis:
       repositories:

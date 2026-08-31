@@ -199,6 +199,6 @@ public class InstituteService {
             enrollment.setGrade(grade);
         }
         
-        return enrollmentRepository.save(enrollment);
+        return enrollmentRepository.saveAndFlush(enrollment);
     }
 }
