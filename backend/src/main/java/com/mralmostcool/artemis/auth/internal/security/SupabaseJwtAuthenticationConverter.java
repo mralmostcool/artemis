@@ -29,6 +29,9 @@ public class SupabaseJwtAuthenticationConverter implements Converter<Jwt, Abstra
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         if (profile != null) {
+            if (!profile.isEnabled()) {
+                throw new org.springframework.security.authentication.DisabledException("User profile is disabled");
+            }
             authorities.add(new SimpleGrantedAuthority("ROLE_" + profile.getRole().name()));
         }
 

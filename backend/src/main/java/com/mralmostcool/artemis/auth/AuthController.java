@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -56,6 +57,26 @@ public class AuthController {
         try {
             ProfileResponse response = authService.updateProfile(principal, request);
             return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PutMapping("/users/{userId}/status")
+    public ResponseEntity<ProfileResponse> updateUserStatus(
+            @AuthenticationPrincipal UserPrincipal adminPrincipal,
+            @PathVariable UUID userId,
+            @RequestParam boolean enabled) {
+
+        if (adminPrincipal == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        try {
+            ProfileResponse response = authService.updateUserStatus(adminPrincipal, userId, enabled);
+            return ResponseEntity.ok(response);
+        } catch (org.springframework.security.access.AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }

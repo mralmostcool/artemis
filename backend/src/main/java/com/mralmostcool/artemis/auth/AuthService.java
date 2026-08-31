@@ -89,6 +89,31 @@ public class AuthService {
         return mapToResponse(profile);
     }
 
+    @Transactional
+    public ProfileResponse updateUserStatus(UserPrincipal adminPrincipal, UUID targetUserId, boolean enabled) {
+        Profile adminProfile = adminPrincipal.getProfile();
+        if (adminProfile == null || adminProfile.getRole() != Role.ADMIN) {
+            throw new org.springframework.security.access.AccessDeniedException("Only admins can disable/enable users");
+        }
+
+        UUID adminId = UUID.fromString(adminPrincipal.getJwt().getSubject());
+        if (adminId.equals(targetUserId)) {
+            throw new IllegalArgumentException("Admins cannot enable or disable themselves");
+        }
+
+        Profile targetProfile = profileRepository.findById(targetUserId)
+                .orElseThrow(() -> new IllegalArgumentException("Target user profile not found"));
+
+        if (adminProfile.getOrganization() == null || targetProfile.getOrganization() == null ||
+                !adminProfile.getOrganization().getId().equals(targetProfile.getOrganization().getId())) {
+            throw new org.springframework.security.access.AccessDeniedException("Admin and target user must belong to the same organization");
+        }
+
+        targetProfile.setEnabled(enabled);
+        targetProfile = profileRepository.save(targetProfile);
+        return mapToResponse(targetProfile);
+    }
+
     private ProfileResponse mapToResponse(Profile profile) {
         return ProfileResponse.builder()
                 .id(profile.getId())
@@ -98,6 +123,7 @@ public class AuthService {
                 .role(profile.getRole())
                 .organizationId(profile.getOrganization() != null ? profile.getOrganization().getId() : null)
                 .organizationName(profile.getOrganization() != null ? profile.getOrganization().getName() : null)
+                .enabled(profile.isEnabled())
                 .build();
     }
 }

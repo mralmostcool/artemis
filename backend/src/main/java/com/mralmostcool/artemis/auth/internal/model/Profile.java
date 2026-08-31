@@ -33,6 +33,13 @@ public class Profile {
     @Column(name = "phone_number")
     private String phoneNumber;
 
+    @Column(name = "created_at", insertable = false, updatable = false)
+    private OffsetDateTime createdAt;
+
+    @Column(nullable = false)
+    @Builder.Default
+    private boolean enabled = true;
+
     @Column(name = "updated_at", insertable = false, updatable = false)
     private OffsetDateTime updatedAt;
 }

@@ -17,4 +17,5 @@ public class ProfileResponse {
     private String organizationName;
     private String displayName;
     private String phoneNumber;
+    private boolean enabled;
 }
