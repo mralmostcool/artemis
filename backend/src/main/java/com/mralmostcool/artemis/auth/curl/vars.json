@@ -1,0 +1,14 @@
+{
+  "anonKey": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5a2hudGR5anZpcmJpbnpueGd2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODgxNTcxMDIsImV4cCI6MjEwMzczMzEwMn0.OpL45ZESa-8bJWI30fzwUxEdfJNiBl7cfU42fipLJ40",
+  "authBaseURL": "http://localhost/api/v1/auth",
+  "supabaseUrl": "https://jykhntdyjvirbinznxgv.supabase.co/auth/v1",
+  "adminEmail": "",
+  "adminPassword": "Password123!",
+  "adminToken": "",
+  "adminId": "",
+  "orgId": "",
+  "memberEmail": "",
+  "memberPassword": "Password123!",
+  "memberToken": "",
+  "memberId": ""
+}
