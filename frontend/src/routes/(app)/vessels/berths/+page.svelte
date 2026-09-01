@@ -3,6 +3,7 @@
   import { api } from '$lib/api';
   import type { Berth, BerthSeafarerAllocation, TrainingBerthRequest } from '$lib/types';
   import { authStore } from '$lib/stores/auth.svelte';
+  import GanttChart from '$lib/components/shared/GanttChart.svelte';
   import { Anchor, Plus, X, Loader2, Check } from '@lucide/svelte';
   import { toast } from 'svelte-sonner';
 
@@ -53,34 +54,16 @@
     } finally { saving = false; }
   }
 
-  // Gantt helpers
-  const now = new Date();
-  const DAYS = 60;
-  const start = new Date(now); start.setDate(start.getDate() - 10);
-  const end = new Date(start); end.setDate(end.getDate() + DAYS);
-  const totalMs = end.getTime() - start.getTime();
-
-  function pct(date: string | Date) {
-    const ms = new Date(date).getTime() - start.getTime();
-    return Math.max(0, Math.min(100, (ms / totalMs) * 100));
-  }
-  function width(s: string, e: string) {
-    return Math.max(1, pct(e) - pct(s));
-  }
-
-  const ganttRows = $derived(
+  // Gantt data for GanttChart component
+  const ganttBars = $derived(
     allocations.map((a) => ({
-      name: `${a.indosMaster?.firstName ?? ''} ${a.indosMaster?.lastName ?? ''}`.trim(),
-      berth: a.berth?.name ?? '',
+      id: a.id,
+      label: `${a.indosMaster?.firstName ?? ''} ${a.indosMaster?.lastName ?? ''}`.trim(),
+      sublabel: a.berth?.name ?? '',
       start: a.startDate,
-      end: a.endDate,
-      leftPct: pct(a.startDate),
-      widthPct: width(a.startDate, a.endDate)
+      end: a.endDate
     }))
   );
-
-  // Today marker
-  const todayPct = $derived(pct(now));
 </script>
 
 <svelte:head><title>Berths & Timeline — Artemis</title></svelte:head>
@@ -132,47 +115,11 @@
   <!-- Gantt Chart -->
   <div class="space-y-3">
     <h2 class="text-lg font-bold text-foreground">Seafarer Allocation Timeline (60 days)</h2>
-    <div class="rounded-xl border border-border bg-card overflow-hidden">
-      {#if loading}
-        <div class="p-8 text-center"><Loader2 class="size-8 animate-spin text-primary mx-auto" /></div>
-      {:else if ganttRows.length === 0}
-        <div class="p-12 text-center"><p class="text-muted-foreground">No active allocations in the next 60 days</p></div>
-      {:else}
-        <!-- Header: date markers -->
-        <div class="border-b border-border bg-muted/30 px-4 py-2 relative overflow-hidden" style="height:36px">
-          {#each Array(5) as _, i}
-            {@const markerDate = new Date(start); markerDate.setDate(markerDate.getDate() + Math.floor((DAYS / 4) * i));}
-            <span class="absolute text-xs text-muted-foreground" style="left:{(i / 4) * 100}%">{markerDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}</span>
-          {/each}
-        </div>
-        <!-- Rows -->
-        <div class="divide-y divide-border">
-          {#each ganttRows as row}
-            <div class="flex items-center gap-0 hover:bg-accent/10 transition-colors group">
-              <!-- Label -->
-              <div class="w-40 shrink-0 px-4 py-3 border-r border-border">
-                <p class="text-xs font-semibold text-foreground truncate">{row.name}</p>
-                <p class="text-[10px] text-muted-foreground truncate">{row.berth}</p>
-              </div>
-              <!-- Bar track -->
-              <div class="flex-1 relative h-12 overflow-hidden">
-                <!-- Today line -->
-                <div class="absolute top-0 bottom-0 w-px bg-primary/40 z-10" style="left:{todayPct}%"></div>
-                <!-- Allocation bar -->
-                <div
-                  class="absolute top-2 bottom-2 rounded-md bg-primary/70 group-hover:bg-primary transition-colors flex items-center px-2 overflow-hidden"
-                  style="left:{row.leftPct}%;width:{row.widthPct}%"
-                >
-                  <span class="text-[10px] text-primary-foreground font-semibold truncate whitespace-nowrap">
-                    {new Date(row.start).toLocaleDateString()} – {new Date(row.end).toLocaleDateString()}
-                  </span>
-                </div>
-              </div>
-            </div>
-          {/each}
-        </div>
-      {/if}
-    </div>
+    {#if loading}
+      <div class="rounded-xl border border-border bg-card p-8 text-center"><Loader2 class="size-8 animate-spin text-primary mx-auto" /></div>
+    {:else}
+      <GanttChart bars={ganttBars} windowDays={60} startOffset={10} />
+    {/if}
   </div>
 </div>
 
